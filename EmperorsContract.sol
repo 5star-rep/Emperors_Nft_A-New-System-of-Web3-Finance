@@ -1231,8 +1231,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     mapping(address => uint256) public PrevDebtID;
     mapping(address => bool) public isDebtor;
     mapping(uint256 => address) public PrevDebtor;
-    mapping(address => uint256) public GetId;
-    mapping(address => uint256) private PurchasedWallets;
 
     event TransferReceived(address from, uint256 amount);
 
@@ -1258,18 +1256,16 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         emit TransferReceived(msg.sender, msg.value);
     }
 
-    function Purchase() payable public {
-        GetId[msg.sender] = Supply;
-        require(PurchasedWallets[msg.sender] < 1, "Needs a different wallet");
+    function mint(address _to, uint256 _mintAmount) payable public {
+        require(_mintAmount == 1, "Mint amount should be 1");
         require(msg.value == Cost, "Wrong value");
         Devs.transfer(DevsShare);
         total_value += msg.value;
         total_value -= DevsShare;
 
-        PurchasedWallets[msg.sender]++;
         Supply++;
         uint256 tokenId = Supply;
-        _transfer(address(this), msg.sender, tokenId);
+        _transfer(address(this), _to, tokenId);
     }
 
     function Borrow(uint256 tokenId) public {
@@ -1333,7 +1329,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         _transfer(address(this), msg.sender, tokenId);
     }
 
-    function Mint(string memory uri)
+    function MintEmperor(string memory uri)
         public
         onlyOwner
     {
