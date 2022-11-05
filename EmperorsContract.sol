@@ -1213,10 +1213,10 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     uint256 public Maxsupply = 1000;
     uint256 public TotalSupply;
     uint256 public Supply;
-    uint256 public Cost = 20 ether;
+    uint256 public Cost = 15 ether;
     uint256 public LendCost = 10 ether;
     uint256 public ClaimCost = 10.5 ether;
-    uint256 public DevsShare = 5 ether;
+    uint256 public DevsShare = 10 ether;
     uint256 public Rank = 2 ether;
 
     mapping(uint256 => uint256) public BorrowedIDs;
@@ -1257,8 +1257,9 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         emit TransferReceived(msg.sender, msg.value);
     }
 
-    function Buy() payable public {
+    function mint(address _to, uint256 _mintAmount) payable public {
         GetId[msg.sender] = Supply;
+        require(_mintAmount == 1, "MintAmount should be 1");
         require(msg.value == Cost, "Wrong value");
         Devs.transfer(DevsShare);
         total_value += msg.value;
@@ -1266,7 +1267,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
         Supply++;
         uint256 tokenId = Supply;
-        _transfer(address(this), msg.sender, tokenId);
+        _transfer(address(this), _to, tokenId);
     }
 
     function Borrow(uint256 tokenId) public {
@@ -1276,7 +1277,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         PrevDebtID[msg.sender] = tokenId;
         PrevDebtor[tokenId] = msg.sender;
         require(BorrowedWallets[msg.sender] < 1, "Caller is a Debtor");
-        require(LendCost <= total_value, "insufficient liquidity");
+        require(LendCost <= total_value, "Insufficient liquidity");
         require(payable(msg.sender).send(LendCost));
 
         BorrowedIDs[tokenId]++;
@@ -1300,6 +1301,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     function ClaimRank() public {
         RankLevel[msg.sender];
+        require(Rank <= total_value, "Insufficient liquidity");
         require(ClearedDebt[msg.sender] > 9, "Rank not completed");
         require(payable(msg.sender).send(Rank));
 
@@ -1330,7 +1332,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         _transfer(address(this), msg.sender, tokenId);
     }
 
-    function Mint(string memory uri)
+    function MintEmperor(string memory uri)
         public
         onlyOwner
     {
