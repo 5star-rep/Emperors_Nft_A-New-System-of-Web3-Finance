@@ -1223,7 +1223,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     mapping(uint256 => uint256) private LockedNft;
     mapping(uint256 => bool) public isLockedIDs;
     mapping(address => uint256) public MyLockedNft;
-    mapping(address => uint256) private LockedWallets;
+    mapping(address => uint256) private LockerWallets;
     mapping(address => uint256) public ClearedDebt;
     mapping(address => uint256) public RankLevel;
     mapping(address => uint256) public RankCode;
@@ -1231,6 +1231,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     mapping(address => uint256) public PrevDebtID;
     mapping(address => bool) public isDebtor;
     mapping(uint256 => address) public PrevDebtor;
+    mapping(address => uint256) public GetId;
 
     event TransferReceived(address from, uint256 amount);
 
@@ -1256,8 +1257,8 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         emit TransferReceived(msg.sender, msg.value);
     }
 
-    function mint(address _to, uint256 _mintAmount) payable public {
-        require(_mintAmount == 1, "Mint amount should be 1");
+    function Buy() payable public {
+        GetId[msg.sender] = Supply;
         require(msg.value == Cost, "Wrong value");
         Devs.transfer(DevsShare);
         total_value += msg.value;
@@ -1265,7 +1266,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
         Supply++;
         uint256 tokenId = Supply;
-        _transfer(address(this), _to, tokenId);
+        _transfer(address(this), msg.sender, tokenId);
     }
 
     function Borrow(uint256 tokenId) public {
@@ -1329,7 +1330,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         _transfer(address(this), msg.sender, tokenId);
     }
 
-    function MintEmperor(string memory uri)
+    function Mint(string memory uri)
         public
         onlyOwner
     {
