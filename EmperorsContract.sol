@@ -1231,7 +1231,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     mapping(address => uint256) public PrevDebtID;
     mapping(address => bool) public isDebtor;
     mapping(uint256 => address) public PrevDebtor;
-    mapping(address => uint256) public GetId;
+    mapping(address => uint256) public GetMintID;
 
     event TransferReceived(address from, uint256 amount);
 
@@ -1258,7 +1258,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     }
 
     function mint(address _to, uint256 _mintAmount) payable public {
-        GetId[msg.sender] = Supply;
+        GetMintID[msg.sender] = Supply;
         require(_mintAmount == 1, "MintAmount should be 1");
         require(msg.value == Cost, "Wrong value");
         Devs.transfer(DevsShare);
