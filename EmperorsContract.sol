@@ -1266,7 +1266,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         total_value -= DevsShare;
 
         Supply++;
-        uint256 tokenId = Supply();
+        uint256 tokenId = Supply;
         _transfer(address(this), _to, tokenId);
     }
 
