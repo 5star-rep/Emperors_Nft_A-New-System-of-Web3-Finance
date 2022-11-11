@@ -1218,6 +1218,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     uint256 public ClaimCost = 10.5 ether;
     uint256 public DevsShare = 10 ether;
     uint256 public Rank = 2 ether;
+    bool public isMintEnabled;
 
     mapping(uint256 => uint256) public BorrowedIDs;
     mapping(uint256 => uint256) private LockedNft;
@@ -1253,8 +1254,13 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         emit TransferReceived(msg.sender, msg.value);
     }
 
+    function EnableMint() public onlyOwner {
+        isMintEnabled = !isMintEnabled;
+    }
+
     function mint(address _to, uint256 _mintAmount) payable public {
         GetMintID[msg.sender] = Supply;
+        require(isMintEnabled, "Minting not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(msg.value == Cost, "Wrong value");
         Devs.transfer(DevsShare);
