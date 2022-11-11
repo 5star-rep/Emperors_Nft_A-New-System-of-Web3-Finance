@@ -1248,10 +1248,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         return 'Oge Ifeluo';
     }
 
-    function Website() public pure returns (string memory) {
-        return 'Emperors-club.org';
-    }
-
     receive() payable external {
         total_value += msg.value;
         emit TransferReceived(msg.sender, msg.value);
