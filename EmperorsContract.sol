@@ -1208,7 +1208,7 @@ pragma solidity ^0.8.4;
 // A new system of Web3 finance
 contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
-    address payable public Devs;
+    address payable private Devs;
     uint total_value;
     uint256 public Maxsupply = 1000;
     uint256 public TotalSupply;
