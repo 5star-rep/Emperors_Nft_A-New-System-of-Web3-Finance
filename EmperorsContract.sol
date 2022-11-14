@@ -1222,7 +1222,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     mapping(uint256 => uint256) public BorrowedIDs;
     mapping(uint256 => uint256) private LockedNft;
-    mapping(uint256 => bool) public isLockedIDs;
+    mapping(uint256 => bool) public isLockedID;
     mapping(address => uint256) public MyLockedNft;
     mapping(address => uint256) private LockerWallets;
     mapping(address => uint256) public ClearedDebt;
@@ -1274,7 +1274,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     function Borrow(uint256 tokenId) public {
         BorrowedIDs[tokenId];
-        isLockedIDs[tokenId] = true;
+        isLockedID[tokenId] = true;
         isDebtor[msg.sender] = true;
         PrevDebtID[msg.sender] = tokenId;
         PrevDebtor[tokenId] = msg.sender;
@@ -1289,7 +1289,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     }
 
     function Claim(uint256 tokenId) payable public {
-        isLockedIDs[tokenId] = false;
+        isLockedID[tokenId] = false;
         isDebtor[msg.sender] = false;
         ClearedDebt[msg.sender];
         BorrowedWallets[msg.sender] = 0;
