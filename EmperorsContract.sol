@@ -1320,7 +1320,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     function LockNft(uint256 tokenId, uint256 passcode) public {
         require(passcode > 99, "Passcode must be greater than 99");
-        require(LockerWallets[msg.sender] < 1, "One wallet per lock");
+        require(LockerWallets[msg.sender] < 1, "Wallet already used");
         LockedNft[tokenId] = passcode;
         MyLockedNft[msg.sender] = tokenId;
 
