@@ -1236,8 +1236,8 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     event TransferReceived(address from, uint256 amount);
 
-    // As long as the Blockchain itself remains unhackable, I guess we
-    // are right on a safe boat
+    // As long as the Blockchain itself remains up and running, I can guarantee
+    // we are right on a safe boat. Emperors is hack resistant
     constructor(address payable devs) payable ERC721("EMPEROR", "EMPEROR") {
         Devs = devs;
         total_value = msg.value;
