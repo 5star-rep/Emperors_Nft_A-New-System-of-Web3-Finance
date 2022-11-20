@@ -1211,7 +1211,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     address payable private Devs;
     uint total_value;
     uint256 public Maxsupply = 1000;
-    uint256 public TotalSupply;
+    uint256 public MintSupply;
     uint256 public Supply;
     uint256 public Cost = 15 ether;
     uint256 public LendCost = 10 ether;
@@ -1340,10 +1340,10 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         public
         onlyOwner
     {
-        require(Maxsupply > TotalSupply, "Max supply exausted");
+        require(Maxsupply > MintSupply, "Max supply exausted");
 
-        TotalSupply++;
-        uint256 tokenId = TotalSupply;
+        MintSupply++;
+        uint256 tokenId = MintSupply;
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, uri);
     }
