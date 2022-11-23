@@ -1229,9 +1229,9 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     mapping(address => uint256) public RankLevel;
     mapping(address => uint256) public RankCode;
     mapping(address => uint256) private BorrowedWallets;
-    mapping(address => uint256) public PrevDebtID;
+    mapping(address => uint256) public DebtID;
     mapping(address => bool) public isDebtor;
-    mapping(uint256 => address) public PrevDebtor;
+    mapping(uint256 => address) public Debtor;
     mapping(address => uint256) public GetMintID;
 
     event TransferReceived(address from, uint256 amount);
@@ -1278,8 +1278,8 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         BorrowedIDs[tokenId];
         isLockedID[tokenId] = true;
         isDebtor[msg.sender] = true;
-        PrevDebtID[msg.sender] = tokenId;
-        PrevDebtor[tokenId] = msg.sender;
+        DebtID[msg.sender] = tokenId;
+        Debtor[tokenId] = msg.sender;
         require(BorrowedWallets[msg.sender] < 1, "Caller is a Debtor");
         require(LendCost <= total_value, "Insufficient liquidity");
         require(payable(msg.sender).send(LendCost));
@@ -1295,10 +1295,10 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         isDebtor[msg.sender] = false;
         ClearedDebt[msg.sender];
         BorrowedWallets[msg.sender] = 0;
-        require(msg.sender == PrevDebtor[tokenId], "Caller not a Debtor or owner of tokenId");
+        require(msg.sender == Debtor[tokenId], "Caller not the Debtor of tokenId");
         require(msg.value == ClaimCost, "Wrong value");
  
-        PrevDebtor[tokenId] = address(0);
+        Debtor[tokenId] = address(0);
         ClearedDebt[msg.sender]++;
         total_value += msg.value;
         _transfer(address(this), msg.sender, tokenId);
