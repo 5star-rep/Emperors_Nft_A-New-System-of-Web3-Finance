@@ -1298,6 +1298,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         require(msg.sender == PrevDebtor[tokenId], "Caller not a Debtor or owner of tokenId");
         require(msg.value == ClaimCost, "Wrong value");
  
+        PrevDebtor[tokenId] = address(0);
         ClearedDebt[msg.sender]++;
         total_value += msg.value;
         _transfer(address(this), msg.sender, tokenId);
