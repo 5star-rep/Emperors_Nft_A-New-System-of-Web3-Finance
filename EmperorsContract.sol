@@ -1211,13 +1211,12 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     address payable private Devs;
     uint total_value;
     uint256 public Maxsupply = 1000;
-    uint256 public MintSupply;
     uint256 public Supply;
     uint256 public Cost = 15 ether;
     uint256 public LendCost = 10 ether;
     uint256 public ClaimCost = 10.5 ether;
     uint256 public DevsShare = 10 ether;
-    uint256 public Rank = 2 ether;
+    uint256 public Rank = 3 ether;
     bool public isMintEnabled;
 
     mapping(uint256 => uint256) public BorrowedIDs;
@@ -1232,7 +1231,9 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     mapping(address => uint256) public DebtID;
     mapping(address => bool) public isDebtor;
     mapping(uint256 => address) public Debtor;
+    mapping(uint256 => string) private tokenUri;
     mapping(address => uint256) public GetMintID;
+    mapping(address => uint256) public UriSet;
 
     event TransferReceived(address from, uint256 amount);
 
@@ -1265,13 +1266,15 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         require(isMintEnabled, "Minting not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(msg.value == Cost, "Wrong value");
+        require(Maxsupply > Supply, "Max supply exhausted");
         Devs.transfer(DevsShare);
         total_value += msg.value;
         total_value -= DevsShare;
 
         Supply++;
         uint256 tokenId = Supply;
-        _transfer(address(this), _to, tokenId);
+        _safeMint(to, tokenId);
+        _setTokenURI(tokenId, tokenUri[tokenId]);
     }
 
     function Borrow(uint256 tokenId) public {
@@ -1337,16 +1340,12 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         _transfer(address(this), msg.sender, tokenId);
     }
 
-    function MintEmperor(string memory uri)
+    function SetUri(uint256 tokenId, string memory uri)
         public
         onlyOwner
     {
-        require(Maxsupply > MintSupply, "Max supply exausted");
-
-        MintSupply++;
-        uint256 tokenId = MintSupply;
-        _safeMint(msg.sender, tokenId);
-        _setTokenURI(tokenId, uri);
+        tokenUri[tokenId] = uri;
+        UriSet[msg.sender]++;
     }
 
     // The following functions are overrides required by Solidity.
