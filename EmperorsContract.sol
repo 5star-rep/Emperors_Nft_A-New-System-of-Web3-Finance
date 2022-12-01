@@ -1216,7 +1216,8 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     uint256 public LendCost = 10 ether;
     uint256 public ClaimCost = 10.5 ether;
     uint256 public DevsShare = 10 ether;
-    uint256 public Rank = 3 ether;
+    uint256 public Rank = 2 ether;
+    uint256 private IDs;
     bool public isMintEnabled;
 
     mapping(uint256 => uint256) public BorrowedIDs;
@@ -1340,10 +1341,12 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         _transfer(address(this), msg.sender, tokenId);
     }
 
-    function SetUri(uint256 tokenId, string memory uri)
+    function SetUri(string memory uri)
         public
         onlyOwner
     {
+        uint256 tokenId = IDs;
+        IDs++;
         tokenUri[tokenId] = uri;
         UriSet[msg.sender]++;
     }
