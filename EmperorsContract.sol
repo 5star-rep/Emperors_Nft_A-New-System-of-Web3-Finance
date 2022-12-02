@@ -1232,6 +1232,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     mapping(address => uint256) public DebtID;
     mapping(address => bool) public isDebtor;
     mapping(uint256 => address) public Debtor;
+    mapping(uint256 => address) public IniOwner;
     mapping(uint256 => string) private tokenUri;
     mapping(address => uint256) public GetMintID;
     mapping(address => uint256) public UriSet;
@@ -1239,7 +1240,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     event TransferReceived(address from, uint256 amount);
 
     // As long as the Blockchain itself remains up and running, I can guarantee
-    // we are right on a safe boat. Emperors is hack resistant
+    // we are right on a safe boat. Emperors is hack resistant.
     constructor(address payable devs) payable ERC721("EMPEROR", "EMPEROR") {
         Devs = devs;
         total_value = msg.value;
@@ -1264,6 +1265,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     function mint(address _to, uint256 _mintAmount) payable public {
         GetMintID[msg.sender] = Supply;
+        IniOwner[tokenId] = msg.sender;
         require(isMintEnabled, "Minting not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(msg.value >= Cost, "Wrong value");
