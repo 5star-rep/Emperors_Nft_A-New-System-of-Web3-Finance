@@ -1268,7 +1268,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         IniOwner[tokenId] = msg.sender;
         require(isMintEnabled, "Minting not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
-        require(msg.value >= Cost, "Wrong value");
+        require(msg.value == Cost, "Wrong value");
         require(Maxsupply > Supply, "Max supply exhausted");
         Devs.transfer(DevsShare);
         total_value += msg.value;
@@ -1302,7 +1302,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         ClearedDebt[msg.sender];
         BorrowedWallets[msg.sender] = 0;
         require(msg.sender == Debtor[tokenId], "Caller not the Debtor of tokenId");
-        require(msg.value >= ClaimCost, "Wrong value");
+        require(msg.value == ClaimCost, "Wrong value");
  
         Debtor[tokenId] = address(0);
         ClearedDebt[msg.sender]++;
