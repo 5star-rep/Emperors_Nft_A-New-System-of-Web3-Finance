@@ -1281,7 +1281,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     }
 
     function Borrow(uint256 tokenId) public {
-
         isLockedID[tokenId] = true;
         isDebtor[msg.sender] = true;
         DebtID[msg.sender] = tokenId;
