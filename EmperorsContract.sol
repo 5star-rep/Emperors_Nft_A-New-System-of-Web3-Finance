@@ -1298,7 +1298,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     function Claim(uint256 tokenId) payable public {
         isLockedID[tokenId] = false;
         isDebtor[msg.sender] = false;
-        ClearedDebt[msg.sender];
         BorrowedWallets[msg.sender] = 0;
         require(msg.sender == Debtor[tokenId], "Caller not the Debtor of tokenId");
         require(msg.value == ClaimCost, "Wrong value");
@@ -1310,7 +1309,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     }
 
     function ClaimRank() public {
-        RankLevel[msg.sender];
         require(Rank <= total_value, "Insufficient liquidity");
         require(ClearedDebt[msg.sender] > 9, "Rank not completed");
         require(payable(msg.sender).send(Rank));
