@@ -1217,7 +1217,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     uint256 public ClaimCost = 7.1 ether;
     uint256 public DevsShare = 3 ether;
     uint256 public Rank = 1 ether;
-    uint256 private IDs;
+    uint256 public IDs;
     bool public isMintEnabled;
 
     mapping(uint256 => uint256) public BorrowedIDs;
@@ -1235,7 +1235,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     mapping(uint256 => address) public IniOwner;
     mapping(uint256 => string) private tokenUri;
     mapping(address => uint256) public GetMintID;
-    mapping(address => uint256) public UriSet;
 
     event TransferReceived(address from, uint256 amount);
 
@@ -1347,7 +1346,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         uint256 tokenId = IDs;
         IDs++;
         tokenUri[tokenId] = uri;
-        UriSet[msg.sender]++;
     }
 
     // The following functions are overrides required by Solidity.
