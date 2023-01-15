@@ -1212,12 +1212,13 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     uint total_value;
     uint256 public Maxsupply = 1000;
     uint256 public Supply;
+    uint256 public Borrowers;
+    uint256 public IDs;
     uint256 public Cost = 10 ether;
     uint256 public LendCost = 7 ether;
     uint256 public ClaimCost = 7.1 ether;
     uint256 public DevsShare = 3 ether;
     uint256 public Rank = 1 ether;
-    uint256 public IDs;
     bool public isMintEnabled;
 
     mapping(uint256 => uint256) public BorrowedIDs;
@@ -1290,6 +1291,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
         BorrowedIDs[tokenId]++;
         BorrowedWallets[msg.sender]++;
+        Borrowers++;
         total_value -= LendCost;
         _transfer(msg.sender, address(this), tokenId);
     }
@@ -1303,6 +1305,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
  
         Debtor[tokenId] = address(0);
         ClearedDebt[msg.sender]++;
+        Borrowers--;
         total_value += msg.value;
         _transfer(address(this), msg.sender, tokenId);
     }
