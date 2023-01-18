@@ -1197,6 +1197,8 @@ abstract contract ERC721URIStorage is ERC721 {
     }
 }
 
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 // File: Emperors.sol
 
 
@@ -1206,10 +1208,12 @@ pragma solidity ^0.8.4;
 
 
 // A new system of Web3 finance
-contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
+contract EMPERORS is ERC721, ERC721URIStorage, IERC20, Ownable {
 
     address payable private Devs;
+    IERC20 public Token;
     uint total_value;
+    uint256 public Amount = 500000000000000000000;
     uint256 public Maxsupply = 1000;
     uint256 public Supply;
     uint256 public Borrowers;
@@ -1263,6 +1267,10 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         isMintEnabled = !isMintEnabled;
     }
 
+    function SetToken(IERC20 token) public onlyOwner {
+        Token = token;
+    }
+
     function mint(address _to, uint256 _mintAmount) payable public {
         GetMintID[msg.sender] = Supply;
         IniOwner[tokenId] = msg.sender;
@@ -1276,6 +1284,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
         Supply++;
         uint256 tokenId = Supply;
+        Token.transfer(_to, Amount);
         _safeMint(_to, tokenId);
         _setTokenURI(tokenId, tokenUri[tokenId]);
     }
