@@ -1233,9 +1233,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     mapping(address => uint256) public DebtID;
     mapping(address => bool) public isDebtor;
     mapping(uint256 => address) public Debtor;
-    mapping(uint256 => address) public IniOwner;
     mapping(uint256 => string) private tokenUri;
-    mapping(address => uint256) public GetMintID;
 
     event TransferReceived(address from, uint256 amount);
 
@@ -1264,8 +1262,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     }
 
     function mint(address _to, uint256 _mintAmount) payable public {
-        GetMintID[msg.sender] = Supply;
-        IniOwner[Supply] = _to;
         require(isMintEnabled, "Minting not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(msg.value == Cost, "Wrong value");
