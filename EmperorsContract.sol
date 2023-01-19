@@ -1273,7 +1273,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, IERC20, Ownable {
 
     function mint(address _to, uint256 _mintAmount) payable public {
         GetMintID[msg.sender] = Supply;
-        IniOwner[tokenId] = msg.sender;
+        IniOwner[Supply] = msg.sender;
         require(isMintEnabled, "Minting not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(msg.value == Cost, "Wrong value");
