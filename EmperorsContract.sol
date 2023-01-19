@@ -1265,7 +1265,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     function mint(address _to, uint256 _mintAmount) payable public {
         GetMintID[msg.sender] = Supply;
-        IniOwner[Supply] = msg.sender;
+        IniOwner[Supply] = _to;
         require(isMintEnabled, "Minting not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(msg.value == Cost, "Wrong value");
@@ -1342,11 +1342,10 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         _transfer(address(this), msg.sender, tokenId);
     }
 
-    function SetUri(string memory uri)
+    function SetUri(uint256 tokenId, string memory uri)
         public
         onlyOwner
     {
-        uint256 tokenId = IDs;
         IDs++;
         tokenUri[tokenId] = uri;
     }
