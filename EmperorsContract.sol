@@ -1252,6 +1252,10 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         return 'Oge Ifeluo';
     }
 
+    function totalSupply() public view returns (uint256) {
+        return Supply;
+    }
+
     receive() payable external {
         total_value += msg.value;
         emit TransferReceived(msg.sender, msg.value);
@@ -1259,10 +1263,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     function EnableMint() public onlyOwner {
         isMintEnabled = !isMintEnabled;
-    }
-
-    function totalSupply() public view returns (uint256) {
-        return Supply;
     }
 
     function mint(address _to, uint256 _mintAmount) payable public {
