@@ -1261,6 +1261,10 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         isMintEnabled = !isMintEnabled;
     }
 
+    function totalSupply() public view virtual returns (uint256) {
+        return Supply;
+    }
+
     function mint(address _to, uint256 _mintAmount) payable public {
         require(isMintEnabled, "Minting not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
