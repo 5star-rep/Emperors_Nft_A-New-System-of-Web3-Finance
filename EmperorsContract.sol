@@ -1261,7 +1261,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         isMintEnabled = !isMintEnabled;
     }
 
-    function totalSupply() public view virtual returns (uint256) {
+    function totalSupply() public view returns (uint256) {
         return Supply;
     }
 
