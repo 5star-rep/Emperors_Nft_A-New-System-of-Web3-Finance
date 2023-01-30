@@ -718,6 +718,9 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Mapping from owner to operator approvals
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
+    // Mapping emperor holders
+    mapping(address => bool) private _isemperor;
+
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      */
@@ -964,6 +967,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
         _balances[to] += 1;
         _owners[tokenId] = to;
+        _isemperor[to] = true;
 
         emit Transfer(address(0), to, tokenId);
 
@@ -1023,6 +1027,14 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         _balances[from] -= 1;
         _balances[to] += 1;
         _owners[tokenId] = to;
+
+        // Transfers emperor right to the new owner
+        if (_balances[from] == 1) {
+            _isemperor[from] = false;
+            _isemperor[to] = true;
+        } else {
+                _isemperor[to] = true;
+        } 
 
         emit Transfer(from, to, tokenId);
 
