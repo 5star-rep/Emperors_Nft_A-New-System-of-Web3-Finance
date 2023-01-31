@@ -721,8 +721,8 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Mapping emperor holders
     mapping(address => bool) private _isemperor;
 
-    // Mapping payday time of holders
-    mapping(address => uint) private _paydayTime;
+    // Mapping transfer time of receiving address with 0 balances
+    mapping(address => uint) private _transferTime;
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -998,15 +998,18 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         _balances[owner] -= 1;
         delete _owners[tokenId];
 
+        if (_balances[owner] == 1) {
+            _isemperor[owner] == false;
+        }
+
         emit Transfer(owner, address(0), tokenId);
 
         _afterTokenTransfer(owner, address(0), tokenId);
     }
 
-    function _pay() internal virtual {
+    function _club() internal virtual {
         require(_isemperor[msg.sender] == true, "Caller not an emperor");
-        require(now >= (_paydayTime[msg.sender] + 4 weeks));
-        _paydayTime[msg.sender] = now;
+        require(now >= (_transferTime[msg.sender] + 5 hours));
     }
 
     /**
@@ -1045,9 +1048,9 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
                 _isemperor[to] = true;
         }
 
-        // Sets a payday time for the next holder if it's balances is 0
+        // Sets transfer time for receiving address, if it's balances is 0
         if (_balances[to] == 0) {
-            _paydayTime[to] = now;
+            _clubTime[to] = now;
         }       
 
         emit Transfer(from, to, tokenId);
@@ -1244,7 +1247,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     uint256 public LendCost = 2 ether;
     uint256 public ClaimCost = 2.01 ether;
     uint256 public DevsShare = 3 ether;
-    uint256 public Pay = 0.1 ether;
     uint256 public Rank = 0.1 ether;
     bool public isMintEnabled;
 
@@ -1347,13 +1349,8 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         ClearedDebt[msg.sender] = 0;
     }
 
-    function PayDay() public {
-        uint256 Lockedliquidity = 2010 ether;
-        require(total_value > Lockedliquidity, "Insufficient balance for payday");
-        require(payable(msg.sender).send(Pay));
-  
-        total_value -= Pay;
-        _pay();
+    function JoinVips() public {
+        _club();
     }
 
     function VerifyRank(uint256 rankCode) public {
