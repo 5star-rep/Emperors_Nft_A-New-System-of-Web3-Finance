@@ -718,12 +718,6 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Mapping from owner to operator approvals
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
-    // Mapping emperor holders
-    mapping(address => bool) private _isemperor;
-
-    // Mapping transfer time of receiving address with 0 balances
-    mapping(address => uint) private _transferTime;
-
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      */
@@ -970,7 +964,6 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
         _balances[to] += 1;
         _owners[tokenId] = to;
-        _isemperor[to] = true;
 
         emit Transfer(address(0), to, tokenId);
 
@@ -998,18 +991,9 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         _balances[owner] -= 1;
         delete _owners[tokenId];
 
-        if (_balances[owner] == 1) {
-            _isemperor[owner] == false;
-        }
-
         emit Transfer(owner, address(0), tokenId);
 
         _afterTokenTransfer(owner, address(0), tokenId);
-    }
-
-    function _club() internal virtual {
-        require(_isemperor[msg.sender] == true, "Caller not an emperor");
-        require(now >= (_transferTime[msg.sender] + 5 hours));
     }
 
     /**
@@ -1038,20 +1022,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
         _balances[from] -= 1;
         _balances[to] += 1;
-        _owners[tokenId] = to;
-
-        // Transfers emperor right to the next holder
-        if (_balances[from] == 1) {
-            _isemperor[from] = false;
-            _isemperor[to] = true;
-        } else {
-                _isemperor[to] = true;
-        }
-
-        // Sets transfer time for receiving address, if it's balances is 0
-        if (_balances[to] == 0) {
-            _clubTime[to] = now;
-        }       
+        _owners[tokenId] = to; 
 
         emit Transfer(from, to, tokenId);
 
@@ -1347,10 +1318,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         RankLevel[msg.sender]++;
         total_value -= Rank;
         ClearedDebt[msg.sender] = 0;
-    }
-
-    function JoinVips() public {
-        _club();
     }
 
     function VerifyRank(uint256 rankCode) public {
