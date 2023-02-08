@@ -61,20 +61,11 @@ contract ERC721Staking is ReentrancyGuard {
             stakers[msg.sender].unclaimedRewards += rewards;
         }
 
-        // Monthly staking reward
-        uint256 monthlyreward = 21000000000000000000000;
-
-        // ERC20 balance of staking contract
-        uint256 erc20balance = rewardsToken.balanceOf(address(this));
-
         // Wallet must own the token they are trying to stake
         require(
             nftCollection.ownerOf(_tokenId) == msg.sender,
             "You don't own this token!"
         );
-
-        // ERC20 balance of staking contract must be greater or equal to monthly pay
-        require(monthlyreward <= erc20balance, "Insufficient liquidity for staking");
 
         // Transfer the token from the wallet to the Smart contract
         nftCollection.transferFrom(msg.sender, address(this), _tokenId);
