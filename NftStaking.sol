@@ -62,7 +62,7 @@ contract ERC721Staking is ReentrancyGuard {
         }
 
         // Monthly staking reward
-        uint256 monthlyreward = 21000000000000000000;
+        uint256 monthlyreward = 21000000000000000000000;
 
         // ERC20 balance of staking contract
         uint256 erc20balance = rewardsToken.balanceOf(address(this));
