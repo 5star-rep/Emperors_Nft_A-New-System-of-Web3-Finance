@@ -1216,11 +1216,11 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     uint256 public Borrowers;
     uint256 public IDs;
     uint256 public Cost = 6 ether; //CORE
-    uint256 public LendCost = 3 ether; //CORE
-    uint256 public ClaimCost = 3.01 ether; //CORE
-    uint256 public DevsShare = 3 ether; //CORE
+    uint256 public LendCost = 2 ether; //CORE
+    uint256 public ClaimCost = 2.01 ether; //CORE
+    uint256 public DevsShare = 4 ether; //CORE
     uint256 public Rank = 0.1 ether; //CORE
-    uint256 public Airdrop = 500000000000000000000; //500 EMPEROR COIN
+    uint256 public Airdrop = 5000000000000000000; //5 EMPEROR COIN
     bool public isMintEnabled;
 
     mapping(uint256 => uint256) public BorrowedIDs;
