@@ -1206,10 +1206,9 @@ pragma solidity ^0.8.4;
 
 
 // A new system of Web3 finance
-contract EMPERORS is ERC721, ERC721URIStorage, IERC20, Ownable {
+contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     address payable private Devs;
-    IERC20 public Coin;
     uint total_value;
     uint256 public Maxsupply = 1000;
     uint256 public Supply;
@@ -1220,7 +1219,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, IERC20, Ownable {
     uint256 public ClaimCost = 2.01 ether; //CORE
     uint256 public DevsShare = 4 ether; //CORE
     uint256 public Rank = 0.1 ether; //CORE
-    uint256 public Airdrop = 5000000000000000000; //5 EMPEROR COIN
     bool public isMintEnabled;
 
     mapping(uint256 => uint256) public BorrowedIDs;
@@ -1241,9 +1239,8 @@ contract EMPERORS is ERC721, ERC721URIStorage, IERC20, Ownable {
 
     // As long as the Blockchain itself remains up and running, I can guarantee
     // we are right on a safe boat. Emperors is hack resistant.
-    constructor(address payable devs, IERC2O coin) payable ERC721("EMPEROR", "EMPEROR") {
+    constructor(address payable devs) payable ERC721("EMPEROR", "EMPEROR") {
         Devs = devs;
-        Coin = coin;
         total_value = msg.value;
     }
 
@@ -1280,7 +1277,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, IERC20, Ownable {
         Supply++;
         uint256 tokenId = Supply;
         _safeMint(_to, tokenId);
-        Coin.transfer(_to, Airdrop);
         _setTokenURI(tokenId, tokenUri[tokenId]);
     }
 
@@ -1368,8 +1364,4 @@ contract EMPERORS is ERC721, ERC721URIStorage, IERC20, Ownable {
     {
         return super.tokenURI(tokenId);
     }
-}
-
-interface IERC20 {
-    function transfer(address to, uint256 amount) external returns (bool);
 }
