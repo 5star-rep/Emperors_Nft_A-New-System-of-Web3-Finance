@@ -9,6 +9,8 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 contract ERC721Staking is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
+    uint256 public Stakers;
+
     // Interfaces for ERC20 and ERC721
     IERC20 public immutable rewardsToken;
     IERC721 public immutable nftCollection;
@@ -67,6 +69,8 @@ contract ERC721Staking is ReentrancyGuard {
             "You don't own this token!"
         );
 
+        Stakers++;
+
         // Transfer the token from the wallet to the Smart contract
         nftCollection.transferFrom(msg.sender, address(this), _tokenId);
 
@@ -115,6 +119,8 @@ contract ERC721Staking is ReentrancyGuard {
                 break;
             }
         }
+
+        Stakers--;
 
         // Set this token's .staker to be address 0 to mark it as no longer staked
         stakers[msg.sender].stakedTokens[index].staker = address(0);
