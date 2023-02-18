@@ -1,4 +1,4 @@
-// SPDX-Identifier-License: MIT
+// SPDX-License-Identifier: MIT
 // File: github/5star-rep/CoreNFTs/EMPERORS.sol
 
 
