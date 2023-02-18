@@ -1251,10 +1251,6 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exhausted");
 
-        if (msg.sender != owner) {
-            require(msg.value >= Cost);
-        }
-
         Supply++;
         uint256 tokenId = Supply;
         _safeMint(_to, tokenId);
