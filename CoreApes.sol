@@ -12,10 +12,11 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
 
     address payable Devs;
     uint total_value;
-    uint256 public Maxsupply = 50000;
+    uint256 public Maxsupply = 10000;
     uint256 public Stakers;
     uint256 public Supply;
     uint256 public Cost = 1 ether;
+    uint256 private Pay = 1 ether;
     bool public isMintEnabled;
     string public URI;
 
@@ -26,6 +27,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
 
     constructor(address payable _devs, IERC20 _rewardsToken) payable ERC721("COREAPES", "CAPE") {
         Devs = _devs;
+        total_value = msg.value;
         rewardsToken = _rewardsToken;
     }
 
@@ -217,7 +219,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     }
 
     receive() payable external {
-        Devs.transfer(msg.value);
+        total_value += msg.value;
         emit TransferReceived(msg.sender, msg.value);
     }
 
@@ -238,7 +240,9 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         require(_mintAmount == 1, "MintAmount should be 1");
         require(msg.value >= Cost, "Wrong value");
         require(Maxsupply > Supply, "Max supply exhausted");
-        Devs.transfer(msg.value);
+        total_value += msg.value;
+        total_value -= Pay;
+        Devs.transfer(Pay);
 
         Supply++;
         uint256 tokenId = Supply;
