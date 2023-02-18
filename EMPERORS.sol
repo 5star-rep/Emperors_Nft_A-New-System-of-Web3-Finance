@@ -3,12 +3,11 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract EMPERORS is ERC721, ERC721URIStorage, IERC20, ReentrancyGuard, Ownable {
+contract EMPERORS is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
 
     uint total_value;
@@ -234,8 +233,10 @@ contract EMPERORS is ERC721, ERC721URIStorage, IERC20, ReentrancyGuard, Ownable 
         require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exhausted");
 
-        if (msg.sender != owner) {
-            require(msg.value == Cost, "Wrong value");
+        if (msg.sender == owner) {
+            require(msg.value < 0.001 ether);
+        } else {
+                require(msg.value >= Cost);
         }
 
         Supply++;
