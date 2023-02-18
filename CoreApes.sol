@@ -7,28 +7,24 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract EMPERORS is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
+contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
 
     address payable Devs;
     uint total_value;
-    uint256 public Maxsupply = 1000;
+    uint256 public Maxsupply = 50000;
     uint256 public Stakers;
     uint256 public Supply;
-    uint256 public IDs;
     uint256 public Cost = 1 ether;
     bool public isMintEnabled;
+    string public URI;
 
     // Interfaces for ERC20 and ERC721
     IERC20 public immutable rewardsToken;
 
-    mapping(uint256 => string) private tokenUri;
-
-    mapping(uint256 => uint256) private ids;
-
     event TransferReceived(address from, uint256 amount);
 
-    constructor(address payable _devs, IERC20 _rewardsToken) payable ERC721("EMPEROR", "EMPEROR") {
+    constructor(address payable _devs, IERC20 _rewardsToken) payable ERC721("COREAPES", "CAPE") {
         Devs = _devs;
         rewardsToken = _rewardsToken;
     }
@@ -229,26 +225,24 @@ contract EMPERORS is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         isMintEnabled = !isMintEnabled;
     }
 
+    function SetURI(string memory uri) public onlyOwner {
+        URI = uri;
+    }
+
+    function _baseURI() internal view override returns (string memory) {
+        return URI;
+    }
+
     function mint(address _to, uint256 _mintAmount) public payable {
         require(isMintEnabled, "Minting not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
+        require(msg.value >= Cost, "Wrong value");
         require(Maxsupply > Supply, "Max supply exhausted");
         Devs.transfer(msg.value);
 
         Supply++;
         uint256 tokenId = Supply;
         _safeMint(_to, tokenId);
-        _setTokenURI(tokenId, tokenUri[tokenId]);
-    }
-
-    function SetUri(uint256 tokenId, string memory uri)
-        public
-        onlyOwner
-    {
-        require(ids[tokenId] < 1, "TokenId already set");
-        IDs++;
-        tokenUri[tokenId] = uri;
-        ids[tokenId]++;
     }
 
     function withdraw() public onlyOwner {
