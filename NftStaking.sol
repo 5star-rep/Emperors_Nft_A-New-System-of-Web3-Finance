@@ -43,7 +43,7 @@ contract ERC721Staking is ReentrancyGuard {
     }
 
     // Rewards per hour per token deposited in wei.
-    uint256 private rewardsPerHour = 30000000000000000;
+    uint256 private rewardsPerHour = 80000000000000000; // 0.08 token per hour
 
     // Mapping of User Address to Staker info
     mapping(address => Staker) public stakers;
