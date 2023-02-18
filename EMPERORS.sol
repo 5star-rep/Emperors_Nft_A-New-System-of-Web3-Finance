@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract EMPERORS is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
 
+    address payable Devs;
     uint total_value;
     uint256 public Maxsupply = 1000;
     uint256 public Stakers;
@@ -27,8 +28,8 @@ contract EMPERORS is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
 
     event TransferReceived(address from, uint256 amount);
 
-    constructor(IERC20 _rewardsToken) payable ERC721("EMPEROR", "EMPEROR") {
-        total_value = msg.value;
+    constructor(address payable _devs, IERC20 _rewardsToken) payable ERC721("EMPEROR", "EMPEROR") {
+        Devs = _devs;
         rewardsToken = _rewardsToken;
     }
 
@@ -220,7 +221,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     }
 
     receive() payable external {
-        total_value += msg.value;
+        Devs.transfer(msg.value);
         emit TransferReceived(msg.sender, msg.value);
     }
 
@@ -232,6 +233,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         require(isMintEnabled, "Minting not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exhausted");
+        Devs.transfer(msg.value);
 
         Supply++;
         uint256 tokenId = Supply;
