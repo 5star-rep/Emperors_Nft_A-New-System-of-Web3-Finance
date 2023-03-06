@@ -19,7 +19,6 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     // Interfaces for ERC20 and ERC721
     IERC20 public immutable PayToken;
 
-    event TransferReceived(address from, uint256 amount);
 
     constructor(address _devs, IERC20 _PayToken) ERC721("COREAPES", "CAPE") {
         Devs = _devs;
@@ -46,11 +45,9 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         return URI;
     }
 
-    function mint(address _to, uint256 _mintAmount) external nonReentrant {
-        require(_mintAmount == 1, "MintAmount should be 1");
-        require(msg.value >= Cost, "Wrong value");
+    function mint(address _to) external nonReentrant {
         require(Maxsupply > Supply, "Max supply exhausted");
-        PayToken.transfer(Devs, cost);
+        PayToken.transferFrom(msg.sender, Devs, cost);
 
         Supply++;
         uint256 tokenId = Supply;
