@@ -13,9 +13,9 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     address public Devs;
     uint256 public Maxsupply = 100000000000000;
     uint256 public Supply;
-    uint256 public LuckyTime;
+    uint256 private LuckyTime;
     uint256 public cost = 5000000000000000000;
-    uint256 public goodies = 10000000000000000000;
+    uint256 public goodies = 5000000000000000000;
     string public URI;
 
     // Interfaces for ERC20 and ERC721
@@ -249,7 +249,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
 
     function bet() external {
         require(stakeTime[msg.sender] == 5, "Need to stake more Nft");
-        require(nextBetTime[msg.sender] > (now + 24 hours));
+        require(now >= (nextBetTime[msg.sender] + 24 hours));
 
         if (LuckyTime == 12) {
             PayToken.transfer(msg.sender, goodies);
@@ -258,7 +258,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
                 LuckyTime++;
         }
 
-        if (betTime[msg.sender] == 5) {
+        if (betTime[msg.sender] == 4) {
             nextBetTime[msg.sender] = now;
             betTime[msg.sender] = 0;
         } else {
