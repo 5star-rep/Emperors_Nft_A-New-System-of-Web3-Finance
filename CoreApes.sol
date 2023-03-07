@@ -242,7 +242,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
 
     function bet() external {
         require(stakeTime[msg.sender] == 5, "Need to stake more Nft");
-        require(now >= (nextBetTime[msg.sender] + 24 hours));
+        require(block.timestamp >= (nextBetTime[msg.sender] + 24 hours));
 
         if (LuckyTime == 12) {
             PayToken.safeTransfer(msg.sender, goodies);
@@ -252,7 +252,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         }
 
         if (betTime[msg.sender] == 4) {
-            nextBetTime[msg.sender] = now;
+            nextBetTime[msg.sender] = block.timestamp;
             betTime[msg.sender] = 0;
         } else {
                 betTime[msg.sender]++;
