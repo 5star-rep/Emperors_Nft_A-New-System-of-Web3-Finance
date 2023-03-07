@@ -146,7 +146,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         stakerAddress[_tokenId] = address(0);
 
         // Transfer the token back to the withdrawer
-        _tranfer(address(this), msg.sender, _tokenId);
+        _transfer(address(this), msg.sender, _tokenId);
 
         // Update the timeOfLastUpdate for the withdrawer   
         stakers[msg.sender].timeOfLastUpdate = block.timestamp;
