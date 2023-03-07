@@ -10,7 +10,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
 
-    address public Devs;
     uint256 public Maxsupply = 100000000000000;
     uint256 public Supply;
     uint256 private LuckyTime;
@@ -22,8 +21,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     IERC20 public immutable PayToken;
 
 
-    constructor(address _devs, IERC20 _PayToken) ERC721("COREAPES", "CAPE") {
-        Devs = _devs;
+    constructor(IERC20 _PayToken) ERC721("COREAPES", "CAPE") {
         PayToken = _PayToken;
     }
 
@@ -49,7 +47,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     }
 
     // Rewards per hour per token deposited in wei.
-    uint256 private rewardsPerHour = 14500000000000000; // 0.0145 Emperor tokens per hour
+    uint256 private rewardsPerHour = 1000000000000000; // 0.001 Emperor tokens per hour
 
     // Mapping of User Address to Staker info
     mapping(address => Staker) public stakers;
@@ -252,7 +250,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         require(now >= (nextBetTime[msg.sender] + 24 hours));
 
         if (LuckyTime == 12) {
-            PayToken.transfer(msg.sender, goodies);
+            PayToken.safeTransfer(msg.sender, goodies);
             LuckyTime = 0;
         } else {
                 LuckyTime++;
