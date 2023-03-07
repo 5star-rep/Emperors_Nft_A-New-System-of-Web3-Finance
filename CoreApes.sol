@@ -13,6 +13,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     uint256 public Maxsupply = 100000000000000;
     uint256 public Supply;
     uint256 private LuckyTime;
+    uint256 public Stakers;
     uint256 public cost = 5000000000000000000;
     uint256 public goodies = 5000000000000000000;
     string public URI;
@@ -72,12 +73,6 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
             uint256 rewards = calculateRewards(msg.sender);
             stakers[msg.sender].unclaimedRewards += rewards;
         }
-
-        // Wallet must own the token they are trying to stake
-        require(
-            nftCollection.ownerOf(_tokenId) == msg.sender,
-            "You don't own this token!"
-        );
 
         Stakers++;
 
