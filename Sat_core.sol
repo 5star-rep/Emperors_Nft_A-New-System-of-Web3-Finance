@@ -10,11 +10,16 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
 
+    address private owner;
+    address payable Devs;
     uint256 public Maxsupply = 5000;
     uint256 public Supply;
+    uint256 public IDs;
+    uint256 private total_value;
     uint256 private LuckyTime;
     uint256 public Stakers;
-    uint256 public cost = 1000000000000000000;
+    uint256 public cost = 1 ether;
+    uint256 private Share = 1 ether;
     uint256 public goodies = 5000000000000000000;
     string public URI;
 
@@ -22,15 +27,27 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     IERC20 public immutable PayToken;
 
 
-    constructor(IERC20 _PayToken) ERC721("COREAPES", "CAPE") {
+    constructor(address payable _devs, IERC20 _PayToken) ERC721("COREAPES", "CAPE") {
+        owner = msg.sender;
+        Devs = _devs;
         PayToken = _PayToken;
+        total_value = msg.value;
     }
 
     struct StakedToken {
         address staker;
         uint256 tokenId;
     }
-    
+
+    receive() payable external {
+        total_value += msg.value;
+    }
+
+    modifier isOwner() {
+        require(msg.sender == owner, "Caller not owner");
+        _;
+    }
+
     // Staker info
     struct Staker {
         // Amount of tokens staked by the staker
@@ -58,6 +75,8 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     mapping(uint256 => address) public stakerAddress;
 
     mapping(address => uint256) public stakeTime;
+
+    mapping(uint256 => string) private tokenUri;
 
     mapping(address => uint256) public betTime;
 
@@ -223,8 +242,15 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         return Supply;
     }
 
-    function SetBaseURI(string memory uri) public onlyOwner {
+    function SetBaseURI(string memory uri) public isOwner {
         URI = uri;
+    }
+
+    function SetUri(uint256 IDs, string memory uri)
+        public
+        isOwner
+    {
+        tokenUri[IDs] = uri;
     }
 
     function _baseURI() internal view override returns (string memory) {
@@ -232,15 +258,27 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     }
 
     function mint(address _to, uint256 _mintAmount) public payable {
-        require(isMintEnabled, "Minting not enabled");
-        require(msg.value == Cost, "Wrong value");
+        require(msg.value >= Cost, "Wrong value");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exhausted");
+        Devs.transfer(Share);
+        total_value += msg.value;
+        total_value -= Share;
+
+        if (IDs == 50) {
+            IDs == 1;
+        } else {
+                IDs++;
+        }
 
         Supply++;
         uint256 tokenId = Supply;
         _safeMint(_to, tokenId);
-        _setTokenURI(tokenId, tokenUri[tokenId]);
+        _setTokenURI(tokenId, tokenUri[IDs]);
+    }
+
+    function withdrawal() public isOwner {
+        require(payable(msg.sender).send(address(this).balance));
     }
 
     function bet() external {
