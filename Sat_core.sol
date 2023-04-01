@@ -231,13 +231,16 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         return URI;
     }
 
-    function mint(address _to) external nonReentrant {
+    function mint(address _to, uint256 _mintAmount) public payable {
+        require(isMintEnabled, "Minting not enabled");
+        require(msg.value == Cost, "Wrong value");
+        require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exhausted");
-        PayToken.transferFrom(msg.sender, address(this), cost);
 
         Supply++;
         uint256 tokenId = Supply;
         _safeMint(_to, tokenId);
+        _setTokenURI(tokenId, tokenUri[tokenId]);
     }
 
     function bet() external {
