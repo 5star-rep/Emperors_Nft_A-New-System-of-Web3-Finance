@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
+contract BRENDON is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
 
     address private owner;
@@ -27,7 +27,7 @@ contract COREAPES is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     IERC20 public immutable PayToken;
 
 
-    constructor(address payable _devs, IERC20 _PayToken) ERC721("COREAPES", "CAPE") {
+    constructor(address payable _devs, IERC20 _PayToken) ERC721("BRENDON", "BS") {
         owner = msg.sender;
         Devs = _devs;
         PayToken = _PayToken;
