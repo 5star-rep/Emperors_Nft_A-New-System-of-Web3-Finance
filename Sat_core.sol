@@ -10,7 +10,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract BRENDON is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
 
-    address private owner;
     address payable Devs;
     uint256 public Maxsupply = 5000;
     uint256 public Supply;
@@ -28,7 +27,6 @@ contract BRENDON is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
 
 
     constructor(address payable _devs, IERC20 _PayToken) ERC721("BRENDON", "BS") {
-        owner = msg.sender;
         Devs = _devs;
         PayToken = _PayToken;
         total_value = msg.value;
@@ -41,11 +39,6 @@ contract BRENDON is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
 
     receive() payable external {
         total_value += msg.value;
-    }
-
-    modifier isOwner() {
-        require(msg.sender == owner, "Caller not owner");
-        _;
     }
 
     // Staker info
@@ -242,13 +235,13 @@ contract BRENDON is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         return Supply;
     }
 
-    function SetBaseURI(string memory uri) public isOwner {
+    function SetBaseURI(string memory uri) public onlyOwner {
         URI = uri;
     }
 
     function SetUri(uint256 IDs, string memory uri)
         public
-        isOwner
+        onlyOwner
     {
         tokenUri[IDs] = uri;
     }
@@ -258,7 +251,7 @@ contract BRENDON is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     }
 
     function mint(address _to, uint256 _mintAmount) public payable {
-        require(msg.value >= Cost, "Wrong value");
+        require(msg.value >= cost, "Wrong value");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exhausted");
         Devs.transfer(Share);
@@ -277,7 +270,7 @@ contract BRENDON is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         _setTokenURI(tokenId, tokenUri[IDs]);
     }
 
-    function withdrawal() public isOwner {
+    function withdrawal() public onlyOwner {
         require(payable(msg.sender).send(address(this).balance));
     }
 
