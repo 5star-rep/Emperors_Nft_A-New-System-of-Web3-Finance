@@ -29,7 +29,6 @@ contract BRENDON is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
     constructor(address payable _devs, IERC20 _PayToken) ERC721("BRENDON", "BS") {
         Devs = _devs;
         PayToken = _PayToken;
-        total_value = msg.value;
     }
 
     struct StakedToken {
