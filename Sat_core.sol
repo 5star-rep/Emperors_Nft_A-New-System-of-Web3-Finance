@@ -266,7 +266,7 @@ contract BRENDON is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         total_value -= Share;
 
         if (IDs == 50) {
-            IDs == 1;
+            IDs = 1;
         } else {
                 IDs++;
         }
