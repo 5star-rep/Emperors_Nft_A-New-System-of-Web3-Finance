@@ -239,11 +239,11 @@ contract BRENDON is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         URI = uri;
     }
 
-    function SetUri(uint256 IDs, string memory uri)
+    function SetUri(uint256 ids, string memory uri)
         public
         onlyOwner
     {
-        tokenUri[IDs] = uri;
+        tokenUri[ids] = uri;
     }
 
     function _baseURI() internal view override returns (string memory) {
@@ -265,9 +265,10 @@ contract BRENDON is ERC721, ERC721URIStorage, ReentrancyGuard, Ownable {
         }
 
         Supply++;
+        uint256 ids = IDs;
         uint256 tokenId = Supply;
         _safeMint(_to, tokenId);
-        _setTokenURI(tokenId, tokenUri[IDs]);
+        _setTokenURI(tokenId, tokenUri[ids]);
     }
 
     function withdrawal() public onlyOwner {
